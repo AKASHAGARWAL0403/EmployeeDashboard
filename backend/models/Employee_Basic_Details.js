@@ -1,5 +1,3 @@
-import { Faculty } from "./Faculty";
-
 const { Model, DataTypes, Deferrable } = require("sequelize");
 
 export class EmployeeBasicDetails extends Model {}

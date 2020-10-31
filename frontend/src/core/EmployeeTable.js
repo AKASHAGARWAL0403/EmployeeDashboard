@@ -19,6 +19,7 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import PropTypes from "prop-types";
+import history from "../HistoryContainer/History";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -149,6 +150,8 @@ export default function EmployeeTable() {
   };
 
   useEffect(() => {
+    // if(localStorage.getItem("employeeId") == null)
+    //  history.push("/");
     console.log(employeeId);
     var apiUrl = "http://localhost:5000/employeeBasic/";
     axios.post(apiUrl, { id: employeeId , designation: 'admin_house_allotment' }).then((repos) => {
@@ -194,7 +197,7 @@ export default function EmployeeTable() {
       });
   };
   return (
-    <div>
+  <div>
       <div>
         <TextField
           autoFocus

@@ -1,6 +1,4 @@
 import { Connect, getSequelize, syncDatabase } from "./db/ConnectDatabase";
-import { initEmployee } from './models/Employee';
-import { initFaculty } from './models/Faculty';
 import { initEmployeeBasicDetails } from './models/Employee_Basic_Details';
 import { initEmployeeEducationDetails } from './models/Employee_Educational_Details';
 import { initEmployeeFamilyDetails } from './models/Employee_Family_Details';
@@ -9,7 +7,6 @@ import { initEmployeeLast5YrStayDetails } from './models/Employee_Last5YrStay_De
 import { initEmployeePrevExpDetails } from './models/Employee_Prev_Exp_Details';
 import express from "express";
 import bodyParser from "body-parser";
-import EmployeeRouter from "./api/Employee/router";
 import EmployeeBasicRouter from './api/EmployeeBasicDetails/router';
 
 import { Database } from "./db/Database";
@@ -24,8 +21,6 @@ import { addRelation } from "./models/Relation";
   const sequelize = getSequelize();
   Database.setSequelize(sequelize);
 
-  await initFaculty(sequelize);
-  await initEmployee(sequelize);
   await initEmployeeBasicDetails(sequelize);
   await initEmployeeEducationDetails(sequelize);
   await initEmployeeFamilyDetails(sequelize);
@@ -46,7 +41,6 @@ import { addRelation } from "./models/Relation";
   
   app.use(cors(corsOptions));
 
-  app.use("/employee" , EmployeeRouter);
   app.use("/employeeBasic" , EmployeeBasicRouter);
 
 

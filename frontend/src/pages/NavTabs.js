@@ -28,6 +28,7 @@ export default function NavTabs() {
         textColor="primary"
         centered
       >
+        <Tab label="Login" onClick={() => history.push("/")} />
         <Tab label="Employee" onClick={() => history.push("/employee")} />
       </Tabs>
     </Paper>
