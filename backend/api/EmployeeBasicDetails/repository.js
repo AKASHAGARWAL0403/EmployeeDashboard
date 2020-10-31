@@ -6,7 +6,7 @@ import { EmployeePayDetails } from "../../models/Employee_Pay_Details";
 import { EmployeePrevExpDetails } from "../../models/Employee_Prev_Exp_Details";
 import { EmployeeLast5YrStayDetails } from "../../models/Employee_Last5YrStay_Details";
 import colName from "../../data/staticData";
-import { getAuthRight } from '../../data/employeeAuth';
+import { getAuthRight } from "../../data/employeeAuth";
 const Op = Sequelize.Op;
 const excel = require("exceljs");
 
@@ -15,8 +15,7 @@ exports.findByEmplId = (req, res) => {
   const designation = req.body.designation;
   var authRightMapping = getAuthRight(designation);
   var condition = id ? { emp_no: { [Op.like]: `%${id}%` } } : null;
-  if(authRightMapping[0] == false)
-    res.send([]);
+  if (authRightMapping[0] == false) res.send([]);
   var allPosibleDataCategory = [
     EmployeeEducationDetails,
     EmployeeFamilyDetails,
@@ -25,8 +24,8 @@ exports.findByEmplId = (req, res) => {
     EmployeePrevExpDetails,
   ];
   var iclArr = [];
-  for(var i = 0;i<5;i++){
-    if(authRightMapping[i+1] == true){
+  for (var i = 0; i < 5; i++) {
+    if (authRightMapping[i + 1] == true) {
       iclArr.push(allPosibleDataCategory[i]);
     }
   }
@@ -46,33 +45,66 @@ exports.findByEmplId = (req, res) => {
 
 exports.downloadAllByEmpId = (req, res) => {
   const id = req.body.id;
+  const designation = req.body.designation;
+  var authRightMapping = getAuthRight(designation);
   var condition = id ? { emp_no: { [Op.like]: `%${id}%` } } : null;
-  var iclArr = [
+  var allPosibleDataCategory = [
     EmployeeEducationDetails,
     EmployeeFamilyDetails,
     EmployeeLast5YrStayDetails,
     EmployeePayDetails,
     EmployeePrevExpDetails,
   ];
+  var iclArr = [];
+  for (var i = 0; i < 5; i++) {
+    if (authRightMapping[i + 1] == true) {
+      iclArr.push(allPosibleDataCategory[i]);
+    }
+  }
   EmployeeBasicDetails.findAll({
     where: condition,
     include: iclArr,
   })
     .then((data) => {
-      const workbook = excelMakerEx();
-      let basicDetailsWorksheet = workbook.getWorksheet("Basic Details");
-      let educationalDetailsWorksheet = workbook.getWorksheet("Educational Details");
-      let familylDetailsWorksheet = workbook.getWorksheet("Family Details");
-      let last5YrStayDetailWorksheet = workbook.getWorksheet("Last 5 Year Stay");
-      let payDetailWorksheet = workbook.getWorksheet("Pay Detail");
-      let prevExpDetailWorksheet = workbook.getWorksheet("Prev Experience Detail");
-      
-      basicDetailsWorksheet.addRows(data);
-      educationalDetailsWorksheet.addRows(getDataFromResponse(data , 'emp_education_detail'));
-      familylDetailsWorksheet.addRows(getDataFromResponse(data , 'emp_family_detail'));
-      last5YrStayDetailWorksheet.addRows(getDataFromResponse(data , 'emp_last5yrstay_detail'));
-      payDetailWorksheet.addRows(getDataFromResponse(data , 'emp_pay_detail'));
-      prevExpDetailWorksheet.addRows(getDataFromResponse(data , 'emp_prev_exp_detail'));
+      const workbook = excelMakerEx(data);
+      if (data != undefined) {
+        let basicDetailsWorksheet = workbook.getWorksheet("Basic Details");
+        basicDetailsWorksheet.addRows(data);
+      }
+      if (data.length == 0 || data[0].emp_education_detail != undefined) {
+        let familylDetailsWorksheet = workbook.getWorksheet("Family Details");
+        familylDetailsWorksheet.addRows(
+          getDataFromResponse(data, "emp_education_detail")
+        );
+      }
+      if (data.length == 0 || data[0].emp_family_detail != undefined) {
+        let educationalDetailsWorksheet = workbook.getWorksheet(
+          "Educational Details"
+        );
+        educationalDetailsWorksheet.addRows(
+          getDataFromResponse(data, "emp_family_detail")
+        );
+      }
+      if (data.length == 0 || data[0].emp_last5yrstay_detail != undefined) {
+        let last5YrStayDetailWorksheet = workbook.getWorksheet(
+          "Last 5 Year Stay"
+        );
+        last5YrStayDetailWorksheet.addRows(
+          getDataFromResponse(data, "emp_last5yrstay_detail")
+        );
+      }
+      if (data.length == 0 || data[0].emp_pay_detail != undefined) {
+        let payDetailWorksheet = workbook.getWorksheet("Pay Detail");
+        payDetailWorksheet.addRows(getDataFromResponse(data, "emp_pay_detail"));
+      }
+      if (data.length == 0 || data[0].emp_prev_exp_detail != undefined) {
+        let prevExpDetailWorksheet = workbook.getWorksheet(
+          "Prev Experience Detail"
+        );
+        prevExpDetailWorksheet.addRows(
+          getDataFromResponse(data, "emp_prev_exp_detail")
+        );
+      }
 
       res.setHeader(
         "Content-Type",
@@ -82,7 +114,7 @@ exports.downloadAllByEmpId = (req, res) => {
         "Content-Disposition",
         "attachment; filename=" + "tutorials.xlsx"
       );
-    
+
       return workbook.xlsx.write(res).then(function () {
         res.status(200).end();
       });
@@ -96,33 +128,66 @@ exports.downloadAllByEmpId = (req, res) => {
 
 exports.downloadOneByEmpId = (req, res) => {
   const id = req.body.id;
-  var condition = id ? { emp_no: id }  : null;
-  var iclArr = [
+  const designation = req.body.designation;
+  var authRightMapping = getAuthRight(designation);
+  var condition = id ? { emp_no: id } : null;
+  var allPosibleDataCategory = [
     EmployeeEducationDetails,
     EmployeeFamilyDetails,
     EmployeeLast5YrStayDetails,
     EmployeePayDetails,
     EmployeePrevExpDetails,
   ];
+  var iclArr = [];
+  for (var i = 0; i < 5; i++) {
+    if (authRightMapping[i + 1] == true) {
+      iclArr.push(allPosibleDataCategory[i]);
+    }
+  }
   EmployeeBasicDetails.findAll({
     where: condition,
     include: iclArr,
   })
     .then((data) => {
-      const workbook = excelMakerEx();
-      let basicDetailsWorksheet = workbook.getWorksheet("Basic Details");
-      let educationalDetailsWorksheet = workbook.getWorksheet("Educational Details");
-      let familylDetailsWorksheet = workbook.getWorksheet("Family Details");
-      let last5YrStayDetailWorksheet = workbook.getWorksheet("Last 5 Year Stay");
-      let payDetailWorksheet = workbook.getWorksheet("Pay Detail");
-      let prevExpDetailWorksheet = workbook.getWorksheet("Prev Experience Detail");
-      
-      basicDetailsWorksheet.addRows(data);
-      educationalDetailsWorksheet.addRows(getDataFromResponse(data , 'emp_education_detail'));
-      familylDetailsWorksheet.addRows(getDataFromResponse(data , 'emp_family_detail'));
-      last5YrStayDetailWorksheet.addRows(getDataFromResponse(data , 'emp_last5yrstay_detail'));
-      payDetailWorksheet.addRows(getDataFromResponse(data , 'emp_pay_detail'));
-      prevExpDetailWorksheet.addRows(getDataFromResponse(data , 'emp_prev_exp_detail'));
+      const workbook = excelMakerEx(data);
+      if (data != undefined) {
+        let basicDetailsWorksheet = workbook.getWorksheet("Basic Details");
+        basicDetailsWorksheet.addRows(data);
+      }
+      if (data.length == 0 || data[0].emp_education_detail != undefined) {
+        let familylDetailsWorksheet = workbook.getWorksheet("Family Details");
+        educationalDetailsWorksheet.addRows(
+          getDataFromResponse(data, "emp_education_detail")
+        );
+      }
+      if (data.length == 0 || data[0].emp_family_detail != undefined) {
+        let educationalDetailsWorksheet = workbook.getWorksheet(
+          "Educational Details"
+        );
+        familylDetailsWorksheet.addRows(
+          getDataFromResponse(data, "emp_family_detail")
+        );
+      }
+      if (data.length == 0 || data[0].emp_last5yrstay_detail != undefined) {
+        let last5YrStayDetailWorksheet = workbook.getWorksheet(
+          "Last 5 Year Stay"
+        );
+        last5YrStayDetailWorksheet.addRows(
+          getDataFromResponse(data, "emp_last5yrstay_detail")
+        );
+      }
+      if (data.length == 0 || data[0].emp_pay_detail != undefined) {
+        let payDetailWorksheet = workbook.getWorksheet("Pay Detail");
+        payDetailWorksheet.addRows(getDataFromResponse(data, "emp_pay_detail"));
+      }
+      if (data.length == 0 || data[0].emp_prev_exp_detail != undefined) {
+        let prevExpDetailWorksheet = workbook.getWorksheet(
+          "Prev Experience Detail"
+        );
+        prevExpDetailWorksheet.addRows(
+          getDataFromResponse(data, "emp_prev_exp_detail")
+        );
+      }
 
       res.setHeader(
         "Content-Type",
@@ -132,7 +197,7 @@ exports.downloadOneByEmpId = (req, res) => {
         "Content-Disposition",
         "attachment; filename=" + "tutorials.xlsx"
       );
-    
+
       return workbook.xlsx.write(res).then(function () {
         res.status(200).end();
       });
@@ -218,76 +283,89 @@ const makeTableStructure = () => {
   return tableStructure;
 };
 
-const getDataFromResponse = (res , name) => {
+const getDataFromResponse = (res, name) => {
   let data = [];
-  res.forEach(row => {
+  res.forEach((row) => {
     data.push(row[name].dataValues);
-  })
+  });
   return data;
-}
+};
 
-const excelMakerEx = () => {
+const excelMakerEx = (data) => {
   let workbook = new excel.Workbook();
-  let basicDetailsWorksheet = workbook.addWorksheet("Basic Details");
-  let educationalDetailsWorksheet = workbook.addWorksheet("Educational Details");
-  let familylDetailsWorksheet = workbook.addWorksheet("Family Details");
-  let last5YrStayDetailWorksheet = workbook.addWorksheet("Last 5 Year Stay");
-  let payDetailWorksheet = workbook.addWorksheet("Pay Detail");
-  let prevExpDetailWorksheet = workbook.addWorksheet("Prev Experience Detail");
 
-  let basicDetailsWorksheetColumns = [];
-  colName.basicDetailsColName.forEach(col => {
-    var colStructure = { header: "" , key: "" , width: 20 };
-    colStructure['header'] = col[0];
-    colStructure['key'] = col[1];
-    basicDetailsWorksheetColumns.push(colStructure);
-  })
-  basicDetailsWorksheet.columns = basicDetailsWorksheetColumns;
+  if (data != undefined) {
+    let basicDetailsWorksheet = workbook.addWorksheet("Basic Details");
+    let basicDetailsWorksheetColumns = [];
+    colName.basicDetailsColName.forEach((col) => {
+      var colStructure = { header: "", key: "", width: 20 };
+      colStructure["header"] = col[0];
+      colStructure["key"] = col[1];
+      basicDetailsWorksheetColumns.push(colStructure);
+    });
+    basicDetailsWorksheet.columns = basicDetailsWorksheetColumns;
+  }
 
-  let educationalDetailsWorksheetColumns = [];
-  colName.educationalDetailsColName.forEach(col => {
-    var colStructure = { header: "" , key: "" , width: 20 };
-    colStructure['header'] = col[0];
-    colStructure['key'] = col[1];
-    educationalDetailsWorksheetColumns.push(colStructure);
-  })
-  educationalDetailsWorksheet.columns = educationalDetailsWorksheetColumns;
+  if (data.length == 0 || data[0].emp_education_detail != undefined) {
+    let educationalDetailsWorksheet = workbook.addWorksheet("Educational Details");
+    let educationalDetailsWorksheetColumns = [];
+    colName.educationalDetailsColName.forEach((col) => {
+      var colStructure = { header: "", key: "", width: 20 };
+      colStructure["header"] = col[0];
+      colStructure["key"] = col[1];
+      educationalDetailsWorksheetColumns.push(colStructure);
+    });
+    educationalDetailsWorksheet.columns = educationalDetailsWorksheetColumns;
+  }
+  
+  if (data.length == 0 || data[0].emp_family_detail != undefined) {
+    let familylDetailsWorksheet = workbook.addWorksheet("Family Details");
+    let familyDetailsWorksheetColumns = [];
+    colName.familyDetailsColName.forEach((col) => {
+      var colStructure = { header: "", key: "", width: 20 };
+      colStructure["header"] = col[0];
+      colStructure["key"] = col[1];
+      familyDetailsWorksheetColumns.push(colStructure);
+    });
+    familylDetailsWorksheet.columns = familyDetailsWorksheetColumns;
+  }
 
-  let familyDetailsWorksheetColumns = [];
-  colName.familyDetailsColName.forEach(col => {
-    var colStructure = { header: "" , key: "" , width: 20 };
-    colStructure['header'] = col[0];
-    colStructure['key'] = col[1];
-    familyDetailsWorksheetColumns.push(colStructure);
-  })
-  familylDetailsWorksheet.columns = familyDetailsWorksheetColumns;
+  if (data.length == 0 || data[0].emp_last5yrstay_detail != undefined) {
+    let last5YrStayDetailWorksheet = workbook.addWorksheet("Last 5 Year Stay");
+    let last5YrStayDetailsWorksheetColumns = [];
+    colName.last5YrStayDetailColName.forEach((col) => {
+      var colStructure = { header: "", key: "", width: 20 };
+      colStructure["header"] = col[0];
+      colStructure["key"] = col[1];
+      last5YrStayDetailsWorksheetColumns.push(colStructure);
+    });
+    last5YrStayDetailWorksheet.columns = last5YrStayDetailsWorksheetColumns;
+  
+  }
 
-  let last5YrStayDetailsWorksheetColumns = [];
-  colName.last5YrStayDetailColName.forEach(col => {
-    var colStructure = { header: "" , key: "" , width: 20 };
-    colStructure['header'] = col[0];
-    colStructure['key'] = col[1];
-    last5YrStayDetailsWorksheetColumns.push(colStructure);
-  })
-  last5YrStayDetailWorksheet.columns = last5YrStayDetailsWorksheetColumns;
-
-  let payDetailsWorksheetColumns = [];
-  colName.payDetailsColName.forEach(col => {
-    var colStructure = { header: "" , key: "" , width: 20 };
-    colStructure['header'] = col[0];
-    colStructure['key'] = col[1];
-    payDetailsWorksheetColumns.push(colStructure);
-  })
-  payDetailWorksheet.columns = payDetailsWorksheetColumns;
-
-  let prevExpDetailsWorksheetColumns = [];
-  colName.prevExpDetailsColName.forEach(col => {
-    var colStructure = { header: "" , key: "" , width: 20 };
-    colStructure['header'] = col[0];
-    colStructure['key'] = col[1];
-    prevExpDetailsWorksheetColumns.push(colStructure);
-  })
-  prevExpDetailWorksheet.columns = prevExpDetailsWorksheetColumns;
+  if (data.length == 0 || data[0].emp_pay_detail != undefined) {
+    let payDetailWorksheet = workbook.addWorksheet("Pay Detail");
+    let payDetailsWorksheetColumns = [];
+    colName.payDetailsColName.forEach((col) => {
+      var colStructure = { header: "", key: "", width: 20 };
+      colStructure["header"] = col[0];
+      colStructure["key"] = col[1];
+      payDetailsWorksheetColumns.push(colStructure);
+    });
+    payDetailWorksheet.columns = payDetailsWorksheetColumns;
+  }
+  
+  if (data.length == 0 || data[0].emp_prev_exp_detail != undefined) {
+    let prevExpDetailWorksheet = workbook.addWorksheet("Prev Experience Detail");
+    let prevExpDetailsWorksheetColumns = [];
+    colName.prevExpDetailsColName.forEach((col) => {
+      var colStructure = { header: "", key: "", width: 20 };
+      colStructure["header"] = col[0];
+      colStructure["key"] = col[1];
+      prevExpDetailsWorksheetColumns.push(colStructure);
+    });
+    prevExpDetailWorksheet.columns = prevExpDetailsWorksheetColumns;
+  }
 
   return workbook;
 };

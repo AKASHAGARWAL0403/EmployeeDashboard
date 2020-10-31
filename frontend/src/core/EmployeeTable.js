@@ -161,7 +161,10 @@ export default function EmployeeTable() {
     axios
       .post(
         apiUrl,
-        { id: e.currentTarget.value },
+        { 
+          id: e.currentTarget.value , 
+          designation : 'admin_house_allotment'
+        },
         {
           responseType: "blob",
         }
@@ -177,7 +180,10 @@ export default function EmployeeTable() {
     axios
       .post(
         apiUrl,
-        { id: employeeId },
+        { 
+          id: employeeId,
+          designation : 'admin_house_allotment'
+        },
         {
           responseType: "blob",
         }
