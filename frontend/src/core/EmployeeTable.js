@@ -151,7 +151,7 @@ export default function EmployeeTable() {
   useEffect(() => {
     console.log(employeeId);
     var apiUrl = "http://localhost:5000/employeeBasic/";
-    axios.post(apiUrl, { id: employeeId }).then((repos) => {
+    axios.post(apiUrl, { id: employeeId , designation: 'admin_house_allotment' }).then((repos) => {
       setMainTableRows(repos.data);
     });
   }, [employeeId]);
@@ -215,66 +215,74 @@ export default function EmployeeTable() {
         <Table className={classes.table} aria-label="custom paginated table">
           <TableHead>
             <StyledTableRow>
+              {(rows != undefined?
               <StyledTableCell align="left" colSpan={9}>
-                Basic Details
-              </StyledTableCell>
+                Basic Detail
+              </StyledTableCell>:null
+              )}
+              {((rows.length == 0 || rows[0].emp_education_detail != undefined)?
               <StyledTableCell align="left" colSpan={6}>
                 Educational Details
-              </StyledTableCell>
+              </StyledTableCell>:null
+              )}
+              {((rows.length == 0 || rows[0].emp_family_detail != undefined)?
               <StyledTableCell align="left" colSpan={9}>
                 Family Details
-              </StyledTableCell>
+              </StyledTableCell>:null
+              )}
+              {((rows.length == 0 || rows[0].emp_last5yrstay_detail != undefined)?
               <StyledTableCell align="left" colSpan={4}>
                 Last 5 Year Stay Details
-              </StyledTableCell>
+              </StyledTableCell>:null
+              )}
+              {((rows.length == 0 || rows[0].emp_pay_detail != undefined)?
               <StyledTableCell align="left" colSpan={2}>
                 Pay Details
-              </StyledTableCell>
+              </StyledTableCell>:null
+              )}
+              {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?
               <StyledTableCell align="left" colSpan={6}>
                 Previous Experience Details
-              </StyledTableCell>
+              </StyledTableCell>:null
+              )}
             </StyledTableRow>
             <StyledTableRow>
-              <StyledTableCell align="center">Emp No</StyledTableCell>
-              <StyledTableCell align="center">Auth Id</StyledTableCell>
-              <StyledTableCell align="center">Designation</StyledTableCell>
-              <StyledTableCell align="center">Office No</StyledTableCell>
-              <StyledTableCell align="center">Fax</StyledTableCell>
-              <StyledTableCell align="center">Joining Date</StyledTableCell>
-              <StyledTableCell align="center">Retirement Ext</StyledTableCell>
-              <StyledTableCell align="center">Retirement Date</StyledTableCell>
-              <StyledTableCell align="center">
-                Employment Nature
-              </StyledTableCell>
-              <StyledTableCell align="center">Exam</StyledTableCell>
-              <StyledTableCell align="center">Specialization</StyledTableCell>
-              <StyledTableCell align="center">Institute</StyledTableCell>
-              <StyledTableCell align="center">Year</StyledTableCell>
-              <StyledTableCell align="center">Grade</StyledTableCell>
-              <StyledTableCell align="center">Division</StyledTableCell>
-              <StyledTableCell align="center">Name</StyledTableCell>
-              <StyledTableCell align="center">Relationship</StyledTableCell>
-              <StyledTableCell align="center">Profession</StyledTableCell>
-              <StyledTableCell align="center">
-                Present Post Address
-              </StyledTableCell>
-              <StyledTableCell align="center">Photopath</StyledTableCell>
-              <StyledTableCell align="center">DOB</StyledTableCell>
-              <StyledTableCell align="center">Active Inactive</StyledTableCell>
-              <StyledTableCell align="center">Emp Dep Allergy</StyledTableCell>
-              <StyledTableCell align="center">Emp Dep Disease</StyledTableCell>
-              <StyledTableCell align="center">From</StyledTableCell>
-              <StyledTableCell align="center">To</StyledTableCell>
-              <StyledTableCell align="center">Address</StyledTableCell>
-              <StyledTableCell align="center">Dist_Hq_Name</StyledTableCell>
-              <StyledTableCell align="center">Paycode</StyledTableCell>
-              <StyledTableCell align="center">Basic Pay</StyledTableCell>
-              <StyledTableCell align="center">Designation</StyledTableCell>
-              <StyledTableCell align="center">From</StyledTableCell>
-              <StyledTableCell align="center">To</StyledTableCell>
-              <StyledTableCell align="center">Payscale</StyledTableCell>
-              <StyledTableCell align="center">Address</StyledTableCell>
-              <StyledTableCell align="center">Remarks</StyledTableCell>
+            {(rows !== undefined?<StyledTableCell align="center">Emp No</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Auth Id</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Designation</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Office No</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Fax</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Joining date</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Retirement Ext</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Retirement Date</StyledTableCell>: null )}
+            {(rows !== undefined?<StyledTableCell align="center">Employement Nature</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_education_detail != undefined)?<StyledTableCell align="center">Exam</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_education_detail != undefined)?<StyledTableCell align="center">Specialization</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_education_detail != undefined)?<StyledTableCell align="center">Institute</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_education_detail != undefined)?<StyledTableCell align="center">Year</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_education_detail != undefined)?<StyledTableCell align="center">Grade</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_education_detail != undefined)?<StyledTableCell align="center">Division</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Name</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Relationship</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Profession</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Present Post Address</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Photopath</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">DOB</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Active_Inactive</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Emp Dep Allergy</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_family_detail != undefined)?<StyledTableCell align="center">Emp Dep Disease</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_last5yrstay_detail != undefined)?<StyledTableCell align="center">From</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_last5yrstay_detail != undefined)?<StyledTableCell align="center">To</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_last5yrstay_detail != undefined)?<StyledTableCell align="center">Address</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_last5yrstay_detail != undefined)?<StyledTableCell align="center">Dist_Hq_Name</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_pay_detail != undefined)?<StyledTableCell align="center">Paycode</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_pay_detail != undefined)?<StyledTableCell align="center">Basic Pay</StyledTableCell>: null )} 
+            {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?<StyledTableCell align="center">Designation</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?<StyledTableCell align="center">From</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?<StyledTableCell align="center">To</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?<StyledTableCell align="center">Payscale</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?<StyledTableCell align="center">Address</StyledTableCell>: null )}
+            {((rows.length == 0 || rows[0].emp_prev_exp_detail != undefined)?<StyledTableCell align="center">Remarks</StyledTableCell>: null )}
             </StyledTableRow>
           </TableHead>
           <TableBody>
@@ -283,110 +291,42 @@ export default function EmployeeTable() {
               : rows
             ).map((row) => (
               <StyledTableRow key={row.emp_no}>
-                <StyledTableCell align="center" style={{ width: 5000 }}>
-                  {row.emp_no}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.auth_id}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.designation}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.office_no}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.fax}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.joining_date}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.retirement_ext}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.retirement_date}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.employment_nature}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_education_detail.exam}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_education_detail.specialization}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_education_detail.institute}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_education_detail.year}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_education_detail.grade}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_education_detail.division}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.name}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.relationship}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.profession}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.present_post_addr}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.photopath}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.dob}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.active_inactive}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.emp_dep_allergy}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_family_detail.emp_dep_disease}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_last5yrstay_detail.from}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_last5yrstay_detail.to}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_last5yrstay_detail.res_addr}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_last5yrstay_detail.dist_hq_name}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_pay_detail.pay_code}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_pay_detail.basic_pay}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_prev_exp_detail.designation}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_prev_exp_detail.from}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_prev_exp_detail.to}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_prev_exp_detail.payscale}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_prev_exp_detail.address}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.emp_prev_exp_detail.remarks}
-                </StyledTableCell>
+                {(row !== undefined?<StyledTableCell align="center">{row.emp_no}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.auth_id}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.designation}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.office_no}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.fax}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.joining_date}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.retirement_ext}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.retirement_date}</StyledTableCell>: null )}
+                {(row !== undefined?<StyledTableCell align="center">{row.employment_nature}</StyledTableCell>: null )}
+                {(row.emp_education_detail !== undefined?<StyledTableCell align="center">{row.emp_education_detail.exam}</StyledTableCell>: null )}
+                {(row.emp_education_detail !== undefined?<StyledTableCell align="center">{row.emp_education_detail.specialization}</StyledTableCell>: null )}
+                {(row.emp_education_detail !== undefined?<StyledTableCell align="center">{row.emp_education_detail.institute}</StyledTableCell>: null )}
+                {(row.emp_education_detail !== undefined?<StyledTableCell align="center">{row.emp_education_detail.year}</StyledTableCell>: null )}
+                {(row.emp_education_detail !== undefined?<StyledTableCell align="center">{row.emp_education_detail.grade}</StyledTableCell>: null )}
+                {(row.emp_education_detail !== undefined?<StyledTableCell align="center">{row.emp_education_detail.division}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.name}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.relationship}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.profession}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.present_post_addr}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.photopath}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.dob}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.active_inactive}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.emp_dep_allergy}</StyledTableCell>: null )}
+                {(row.emp_family_detail !== undefined?<StyledTableCell align="center">{row.emp_family_detail.emp_dep_disease}</StyledTableCell>: null )}
+                {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.from}</StyledTableCell>: null )}
+                {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.to}</StyledTableCell>: null )}
+                {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.res_addr}</StyledTableCell>: null )}
+                {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.dist_hq_name}</StyledTableCell>: null )}
+                {(rows.emp_pay_detail !== undefined?<StyledTableCell align="center">{row.emp_pay_detail.paycode}</StyledTableCell>: null )}
+                {(rows.emp_pay_detail !== undefined?<StyledTableCell align="center">{row.emp_pay_detail.basic_pay}</StyledTableCell>: null )}
+                {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.designation}</StyledTableCell>: null )}
+                {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.from}</StyledTableCell>: null )}
+                {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.to}</StyledTableCell>: null )}
+                {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.payscale}</StyledTableCell>: null )}
+                {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.address}</StyledTableCell>: null )}
+                {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.remarks}</StyledTableCell>: null )}
                 <StyledTableCell align="center">
                   <Button
                     variant="contained"

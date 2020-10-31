@@ -6,19 +6,30 @@ import { EmployeePayDetails } from "../../models/Employee_Pay_Details";
 import { EmployeePrevExpDetails } from "../../models/Employee_Prev_Exp_Details";
 import { EmployeeLast5YrStayDetails } from "../../models/Employee_Last5YrStay_Details";
 import colName from "../../data/staticData";
+import { getAuthRight } from '../../data/employeeAuth';
 const Op = Sequelize.Op;
 const excel = require("exceljs");
 
 exports.findByEmplId = (req, res) => {
   const id = req.body.id;
+  const designation = req.body.designation;
+  var authRightMapping = getAuthRight(designation);
   var condition = id ? { emp_no: { [Op.like]: `%${id}%` } } : null;
-  var iclArr = [
+  if(authRightMapping[0] == false)
+    res.send([]);
+  var allPosibleDataCategory = [
     EmployeeEducationDetails,
     EmployeeFamilyDetails,
     EmployeeLast5YrStayDetails,
     EmployeePayDetails,
     EmployeePrevExpDetails,
   ];
+  var iclArr = [];
+  for(var i = 0;i<5;i++){
+    if(authRightMapping[i+1] == true){
+      iclArr.push(allPosibleDataCategory[i]);
+    }
+  }
   EmployeeBasicDetails.findAll({
     where: condition,
     include: iclArr,
@@ -32,7 +43,6 @@ exports.findByEmplId = (req, res) => {
       });
     });
 };
-
 
 exports.downloadAllByEmpId = (req, res) => {
   const id = req.body.id;
@@ -280,38 +290,4 @@ const excelMakerEx = () => {
   prevExpDetailWorksheet.columns = prevExpDetailsWorksheetColumns;
 
   return workbook;
-  // basicDetailsWorksheet.columns = [
-  //   { header: "Emp No" , key: "id" , width: 5 },
-  //   { header: "Title", key: "title", width: 25 },
-  //   { header: "Description", key: "description", width: 25 },
-  //   { header: "Published", key: "published", width: 10 },
-  // ];
-
-  // const idCol = worksheet.getColumn('id');
-  // idCol.header = ['id1' , 'id2'];
-  // let tutorials = [];
-  // tutorials.push({
-  //   id: 1,
-  //   title: "Akash",
-  //   description: "obj.descriptio",
-  //   published: "obj.published",
-  //   creation: "akas"
-  // });
-
-  // // // Add Array Rows
-  // basicDetailsWorksheet.addRows(tutorials);
-
-  // res is a Stream object
-  res.setHeader(
-    "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  );
-  res.setHeader(
-    "Content-Disposition",
-    "attachment; filename=" + "tutorials.xlsx"
-  );
-
-  return workbook.xlsx.write(res).then(function () {
-    res.status(200).end();
-  });
 };
