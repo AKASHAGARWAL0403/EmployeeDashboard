@@ -9,6 +9,11 @@ export const initEmployeeBasicDetails = async (sequelize) => {
         type: DataTypes.STRING,
         primaryKey: true,
       },
+      password: {
+          type: DataTypes.TEXT,
+          allowNull: true,
+          defaultValue: ''
+      },
       auth_id: {
         type: DataTypes.STRING,
         allowNull: false,

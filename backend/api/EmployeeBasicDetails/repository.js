@@ -209,6 +209,37 @@ exports.downloadOneByEmpId = (req, res) => {
     });
 };
 
+exports.findDesignationByEmpId = (req , res) => {
+  const id = req.body.id;
+  const password = req.body.password;
+  EmployeeBasicDetails.findOne({
+    where: {emp_no : id},
+  })
+    .then((data) => {
+      console.log(data);
+      var obj = {
+        designation : '',
+        exist : false,
+        password : false
+      };
+      if(data != null && data.password == password){
+        obj['designation'] = data.designation;
+        obj['exist'] = true;
+        obj['password'] = true;
+      }
+      else if(data != null){
+        obj['exist'] = true;
+        obj['password'] = false;
+      }
+      res.status(200).send(obj);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error retrieving Employee with id=" + id,
+      });
+    });
+}
+
 const makeTableStructure = () => {
   var tableStructure = [];
   var heading = [];

@@ -19,16 +19,23 @@ export default function NavTabs() {
     setValue(newValue);
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("employeeId");
+    sessionStorage.removeItem("employeeDesignation");
+    history.push("/");
+    window.location.reload();
+  }
   return (
     <Paper className={classes.root}>
       <Tabs
-        value={value}
+        //value={value}
         onChange={handleChange}
         indicatorColor="primary"
         textColor="primary"
         centered
       >
-        <Tab label="Login" onClick={() => history.push("/")} />
+        {sessionStorage.getItem("employeeId") == null && <Tab label="Login" onClick={() => history.push("/")} />}
+        {sessionStorage.getItem("employeeId") && <Tab label="Logout" onClick={handleLogout} />}
         <Tab label="Employee" onClick={() => history.push("/employee")} />
       </Tabs>
     </Paper>

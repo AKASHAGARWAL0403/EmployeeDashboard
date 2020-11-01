@@ -150,11 +150,10 @@ export default function EmployeeTable() {
   };
 
   useEffect(() => {
-    // if(localStorage.getItem("employeeId") == null)
-    //  history.push("/");
     console.log(employeeId);
     var apiUrl = "http://localhost:5000/employeeBasic/";
-    axios.post(apiUrl, { id: employeeId , designation: 'admin_house_allotment' }).then((repos) => {
+    axios.post(apiUrl, { id: employeeId , designation: sessionStorage.getItem("employeeDesignation") }).then((repos) => {
+      console.log(repos);
       setMainTableRows(repos.data);
     });
   }, [employeeId]);
@@ -166,7 +165,7 @@ export default function EmployeeTable() {
         apiUrl,
         { 
           id: e.currentTarget.value , 
-          designation : 'admin_house_allotment'
+          designation : sessionStorage.getItem("employeeDesignation")
         },
         {
           responseType: "blob",
@@ -185,7 +184,7 @@ export default function EmployeeTable() {
         apiUrl,
         { 
           id: employeeId,
-          designation : 'admin_house_allotment'
+          designation : sessionStorage.getItem("employeeDesignation")
         },
         {
           responseType: "blob",
@@ -205,7 +204,6 @@ export default function EmployeeTable() {
           id="name"
           onChange={(event) => {
             setEmployeeId(event.target.value);
-            // console.log(event.target.value);
           }}
           label="Employee Id"
           type="text"
