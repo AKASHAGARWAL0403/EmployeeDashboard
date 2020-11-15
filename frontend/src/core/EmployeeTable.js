@@ -326,8 +326,8 @@ export default function EmployeeTable() {
                 {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.to}</StyledTableCell>: null )}
                 {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.res_addr}</StyledTableCell>: null )}
                 {(row.emp_last5yrstay_detail !== undefined?<StyledTableCell align="center">{row.emp_last5yrstay_detail.dist_hq_name}</StyledTableCell>: null )}
-                {(rows.emp_pay_detail !== undefined?<StyledTableCell align="center">{row.emp_pay_detail.paycode}</StyledTableCell>: null )}
-                {(rows.emp_pay_detail !== undefined?<StyledTableCell align="center">{row.emp_pay_detail.basic_pay}</StyledTableCell>: null )}
+                {(row.emp_pay_detail !== undefined?<StyledTableCell align="center">{row.emp_pay_detail.pay_code}</StyledTableCell>: null )}
+                {(row.emp_pay_detail !== undefined?<StyledTableCell align="center">{row.emp_pay_detail.basic_pay}</StyledTableCell>: null )}
                 {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.designation}</StyledTableCell>: null )}
                 {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.from}</StyledTableCell>: null )}
                 {(row.emp_prev_exp_detail !== undefined?<StyledTableCell align="center">{row.emp_prev_exp_detail.to}</StyledTableCell>: null )}

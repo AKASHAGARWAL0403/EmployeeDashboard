@@ -33,7 +33,7 @@ export const initEmployeeEducationDetails = async (sequelize) => {
         allowNull: false,
       },
       division: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.STRING,
         allowNull: false,
       }
     },

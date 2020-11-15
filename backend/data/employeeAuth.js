@@ -18,11 +18,11 @@ Different Section of Data are
 6.) Last 5 Year Stay Data
 */
 
-var admin = [true , true , false , true , true , true];
+var admin = [true , true , false , true , false , true];
 var director = [true , true , true , true , false , true];
 var registar = [true , true , false , true , true , false];
 var dean = [true , true , true , true , true , true];
-var academic_dean = [true , true , false , false , false , false];
+var academic_dean = [true , true , true , false , false , false];
 var admin_house_allotment = [true , false , false , false , false , true];
 
 exports.getAuthRight = (designation) => {

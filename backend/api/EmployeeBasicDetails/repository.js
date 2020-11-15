@@ -61,31 +61,33 @@ exports.downloadAllByEmpId = (req, res) => {
       iclArr.push(allPosibleDataCategory[i]);
     }
   }
+  console.log(iclArr);
   EmployeeBasicDetails.findAll({
     where: condition,
     include: iclArr,
   })
     .then((data) => {
+      console.log(data);
       const workbook = excelMakerEx(data);
       if (data != undefined) {
         let basicDetailsWorksheet = workbook.getWorksheet("Basic Details");
         basicDetailsWorksheet.addRows(data);
       }
-      if (data.length == 0 || data[0].emp_education_detail != undefined) {
+      if (data.length != 0 && data[0].emp_family_detail != undefined) {
         let familylDetailsWorksheet = workbook.getWorksheet("Family Details");
         familylDetailsWorksheet.addRows(
-          getDataFromResponse(data, "emp_education_detail")
+          getDataFromResponse(data, "emp_family_detail")
         );
       }
-      if (data.length == 0 || data[0].emp_family_detail != undefined) {
+      if (data.length != 0 && data[0].emp_education_detail != undefined) {
         let educationalDetailsWorksheet = workbook.getWorksheet(
           "Educational Details"
         );
         educationalDetailsWorksheet.addRows(
-          getDataFromResponse(data, "emp_family_detail")
+          getDataFromResponse(data, "emp_education_detail")
         );
       }
-      if (data.length == 0 || data[0].emp_last5yrstay_detail != undefined) {
+      if (data.length != 0 && data[0].emp_last5yrstay_detail != undefined) {
         let last5YrStayDetailWorksheet = workbook.getWorksheet(
           "Last 5 Year Stay"
         );
@@ -154,18 +156,18 @@ exports.downloadOneByEmpId = (req, res) => {
         let basicDetailsWorksheet = workbook.getWorksheet("Basic Details");
         basicDetailsWorksheet.addRows(data);
       }
-      if (data.length == 0 || data[0].emp_education_detail != undefined) {
+      if (data.length != 0 && data[0].emp_family_detail != undefined) {
         let familylDetailsWorksheet = workbook.getWorksheet("Family Details");
-        educationalDetailsWorksheet.addRows(
-          getDataFromResponse(data, "emp_education_detail")
+        familylDetailsWorksheet.addRows(
+          getDataFromResponse(data, "emp_family_detail")
         );
       }
-      if (data.length == 0 || data[0].emp_family_detail != undefined) {
+      if (data.length != 0 && data[0].emp_education_detail != undefined) {
         let educationalDetailsWorksheet = workbook.getWorksheet(
           "Educational Details"
         );
-        familylDetailsWorksheet.addRows(
-          getDataFromResponse(data, "emp_family_detail")
+        educationalDetailsWorksheet.addRows(
+          getDataFromResponse(data, "emp_education_detail")
         );
       }
       if (data.length == 0 || data[0].emp_last5yrstay_detail != undefined) {
